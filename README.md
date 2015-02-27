@@ -5,6 +5,6 @@
 * [JSON](photography.json)
 
 
-## Talk with us vi HipChat
+## Talk with us via HipChat
 
 https://www.hipchat.com/g5fiCwbCI
