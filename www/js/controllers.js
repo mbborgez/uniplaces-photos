@@ -36,7 +36,8 @@ angular.module('starter.controllers', ['ionic', 'utils'])
         // Perform the login action when the user submits the login form
         $scope.doLogin = function () {
             $localstorage.set('user', $scope.loginData.username)
-            $scope.closeLogin();
+            $scope.modal.hide();
+            $state.transitionTo('app.homes');
         };
 
         $scope.isLogged = function() {

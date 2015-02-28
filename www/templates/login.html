@@ -1,35 +1,27 @@
 <ion-view view-title="Uniplaces">
   <ion-content>
-<ion-modal-view>
-  <ion-header-bar>
-    <h1 class="title">Login</h1>
-    <div class="buttons">
-      <button class="button button-clear" ng-click="closeLogin()">Close</button>
-    </div>
-  </ion-header-bar>
-  <ion-content>
-    <form ng-submit="doLogin()">
-      <div class="list">
-        <label class="item item-input">
-          <span class="input-label">Username</span>
-          <input type="text" ng-model="loginData.username">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">Password</span>
-          <input type="password" ng-model="loginData.password">
-        </label>
-        <label class="item">
-          <button ng-disabled="!loginData.username"
-             ng-click="doLogin()"
-             class="button button-block button-balanced" type="button">
-            <i class="ion-locked" ng-show="!loginData.username"></i>
-            <i class="ion-unlocked" ng-show="loginData.username"></i>
-            Log in
-          </button>
-        </label>
-      </div>
-    </form>
+    <ion-modal-view>
+    <ion-content>
+        <div class="list">
+          <label class="item item-input">
+            <span class="input-label">Username</span>
+            <input type="text" ng-model="loginData.username">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">Password</span>
+            <input type="password" ng-model="loginData.password">
+          </label>
+          <label class="item">
+            <button ng-disabled="!loginData.username"
+               ng-click="doLogin()"
+               class="button button-block button-balanced" type="button">
+              <i class="ion-locked" ng-show="!loginData.username"></i>
+              <i class="ion-unlocked" ng-show="loginData.username"></i>
+              Log in
+            </button>
+          </label>
+        </div>
+    </ion-content>
+    </ion-modal-view>
   </ion-content>
-</ion-modal-view>
-</ion-content>
 </ion-view>
