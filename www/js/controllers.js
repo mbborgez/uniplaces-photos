@@ -86,6 +86,7 @@ angular.module('starter.controllers', ['ionic', 'utils'])
             newSections($scope.home);
 
             if ($scope.home) {
+                $scope.origSections = $scope.home.sections;
                 $scope.sections = $scope.home.sections;
             } else {
                 $state.transitionTo('app.homes')
