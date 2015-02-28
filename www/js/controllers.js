@@ -64,7 +64,6 @@ angular.module('starter.controllers', ['ionic', 'utils'])
     })
 
     .controller('SectionsCtrl', function ($scope, $stateParams, $state, $timeout, $homesStorage) {
-        debugger;
         $scope.homeId = $stateParams.homeId;
         //$scope.sections = sections;
 
@@ -87,17 +86,16 @@ angular.module('starter.controllers', ['ionic', 'utils'])
         if (home && home.sections && $stateParams.sectionId) {
             $scope.section = findSection(home.sections, $stateParams.sectionId);
             if (!$scope.section) {
-                $state.transitionTo('app.sections');
+                $state.transitionTo('app.sections', {homeId: $stateParams.homeId});
             }
         }
 
         $scope.saveChanges = function (section) {
-            console.log("saving changes");
-            console.log(section);
             $timeout(function () {
+                console.log("saving changes..", section);
                 section.onChange();
                 $homesStorage.saveHome(home);
-                $state.transitionTo('app.sections');
+                $state.transitionTo('app.sections', {homeId: $stateParams.homeId});
             });
         };
 
@@ -124,37 +122,51 @@ function Home(id, sections) {
 }
 
 function Entry(name, type, propertie_name, home) {
+    var self = this;
     this.name = name;
     this.type = type;
     this.value = undefined;
 
-    this.onChange = function () {
-        return function (value) {
-            var properties_names = propertie_name.split('.');
-            var last_name = properties_names.pop();
-            searchPropertie(home, properties_names)[last_name] = value;
-        };
+    var findProperties = function(obj, properties_names) {
+        if (obj && properties_names) {
+            var search = properties_names.shift();
+            if(obj[search]) {
+                if (properties_names.length == 0) {
+                   self.value = obj[search];
+                } else {
+                    findProperties(obj[search], properties_names);
+                }
+            }
+        }
+    }
+
+    var createProperties = function(obj, properties_names) {
+        if (obj && properties_names) {
+            var search = properties_names.shift();
+            if(!obj[search] && properties_names.length > 0) {
+                obj[search] = {};
+            }
+            if (properties_names.length == 0) {
+                obj[search] = self.value;
+            } else {
+                createProperties(obj[search], properties_names);
+            }
+        }
+    }
+
+    this.onChange = function (value) {
+        var properties_names = propertie_name.split('.');
+        createProperties(home, properties_names);
     };
 
     this.onLoad = function () {
-        return function () {
-            var properties_names = propertie_name.split('.');
-            var last_name = properties_names.pop();
-            this.value = searchPropertie(home, properties_names)[last_name];
-        };
+        var properties_names = propertie_name.split('.');
+        findProperties(home, properties_names);
     };
 
-    function searchPropertie(obj, properties_names) {
-        if (properties_names) {
-            var search = properties_names.shift();
-            if (properties_names.length == 0) {
-                return obj;
-            } else {
-                return searchPropertie(obj[search], properties_names);
-            }
-        }
-        return obj;
-    }
+    this.valueOf = function() {
+        return self.value;
+    };
 }
 
 function TextEntry(name, onChange, home) {
@@ -231,20 +243,18 @@ function propertie(x) {
 function newSections(home) {
     if(!home) { return;}
     var initialSection = new Section(home, "Overview", [
-        new TextEntry("Photographer", propertie('photographer_id')),
-        new TextEntry("Provider", propertie("accommodation_provider.name")),
-        new OptionsEntry("Rent as", ["whole", "room"], propertie("rent_as")),
-        new BooleanEntry("Real", function () {
-        })
+        new TextEntry("Photographer", propertie('photographer_id'), home),
+        new TextEntry("Provider", propertie("accommodation_provider.name"), home),
+        new OptionsEntry("Rent as", ["whole", "room"], propertie("rent_as"), home),
     ]);
 
     var typologySection = new Section(home, "Typology", [
-        new OptionsEntry("Type", ["house", "apartment", "studio"], propertie('typology.type_code')),
-        new OptionsEntry("Accomodation type", ["residence", "hotel", "hostel", "private"], propertie("typology.accommodation_type_code")),
-        new NumberEntry("Number of bedrooms", propertie("typology.number_of_bedrooms")),
-        new NumberEntry("Number of bathrooms", propertie("typology.number_of_bathrooms")),
-        new NumberEntry("Number of wc", propertie("typology.number_of_wc")),
-        new NumberEntry("Area", propertie("typology.area"))
+        new OptionsEntry("Type", ["house", "apartment", "studio"], propertie('typology.type_code'), home),
+        new OptionsEntry("Accomodation type", ["residence", "hotel", "hostel", "private"], propertie("typology.accommodation_type_code"), home),
+        new NumberEntry("Number of bedrooms", propertie("typology.number_of_bedrooms"), home),
+        new NumberEntry("Number of bathrooms", propertie("typology.number_of_bathrooms"), home),
+        new NumberEntry("Number of wc", propertie("typology.number_of_wc"), home),
+        new NumberEntry("Area", propertie("typology.area"), home)
     ]);
 
     var x = [
