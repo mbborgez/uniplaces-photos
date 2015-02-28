@@ -195,7 +195,7 @@ function NumberEntry(name, onChange, home) {
 }
 
 function Section(home, name, entries) {
-    this.home = home;
+    //this.home = home;
     this.name = name;
     this.id = hashCode(name);
     this.entries = entries;
