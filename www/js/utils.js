@@ -33,6 +33,7 @@ angular.module('utils', ['ionic'])
 
 
     getHomeById: function(id) {
+      console.log('getHomeById', id);
       var allHomes = this.getAllHomes();
       for(var i=0; i< allHomes.length; ++i) {
         if(allHomes[i] && allHomes[i].id && allHomes[i].id == id) {
