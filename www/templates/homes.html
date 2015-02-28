@@ -1,0 +1,18 @@
+<ion-view view-title="Uniplaces">
+  <ion-content>
+    <div class="list">
+      <ion-item ng-repeat="home in homes" href="#/app/sections/{{home.id}}">
+        {{home.name || home.id}}
+      </ion-item>
+
+	    <div ng-if="homes.length == 0">
+	    	<h4>There are no homes yet, please create one.</h4>
+	    </div>
+    </div>
+  </ion-content>
+	<ion-footer-bar align-title="center" class="bar-positive">
+		<div class="buttons" ng-click="create()">
+			<button class="button button-large">Create</button>
+		</div>
+	</ion-footer-bar>
+</ion-view>

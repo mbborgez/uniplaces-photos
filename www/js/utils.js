@@ -13,6 +13,43 @@ angular.module('utils', ['ionic'])
     },
     getObject: function(key) {
       return JSON.parse($window.localStorage[key] || '{}');
+    },
+    setArray: function(key, array) {
+      this.set(key, JSON.stringify(array));
+    },
+    getArray: function(key) {
+      return JSON.parse($window.localStorage[key] || '[]');
     }
   }
 }])
+
+
+.factory('$homesStorage', ['$localstorage', function($localstorage) {
+  return {
+
+    getAllHomes: function() {
+      return $localstorage.getArray('homes') || [];
+    },
+
+
+    getHomeById: function(id) {
+      var allHomes = this.getAllHomes();
+      for(var i=0; i< allHomes.length; ++i) {
+        if(allHomes[i] && allHomes[i].id && allHomes[i].id == id) {
+          return allHomes[i];
+        }
+      }
+    },
+
+    saveHomes: function(allHomes) {
+      $localstorage.setArray('homes', allHomes);
+    },
+
+    saveHome: function(newHome) {
+      var homes = this.getAllHomes();
+      homes.push(newHome);
+      this.saveHomes(homes);
+    }
+
+  };
+}]);
