@@ -1,7 +1,7 @@
 <ion-view view-title="Home">
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="section in sections" href="#/app/section/{{section.id}}">
+      <ion-item ng-repeat="section in sections" href="#/app/section/{{home.id}}/{{section.id}}">
         {{section.name}}
       </ion-item>
     </ion-list>
