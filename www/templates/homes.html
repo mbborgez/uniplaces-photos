@@ -6,16 +6,23 @@
       </ion-item>
 
 	    <div ng-if="homes.length == 0">
-	    	<h4>There are no homes yet, please create one.</h4>
+	    	<center>
+		    	<h4>There are no homes yet, please create one.</h4>
+	    	</center>
 	    </div>
     </div>
   </ion-content>
-	<ion-footer-bar align-title="center" class="bar-positive">
-		<div class="buttons" ng-click="create()">
-			<button class="button button-large">Create</button>
-		</div>
-		<div class="buttons" ng-click="sync()">
-			<button class="button button-large">Synch</button>
+	<ion-footer-bar align-title="center" class="bar-dark">
+		<div class="buttons">
+			<button class="button button-dark" ng-click="create()">
+				<i class="ion-document"></i>
+				Create
+			</button>
+
+			<button class="button button-dark" ng-click="sync()">
+			    <i class="icon ion-upload"></i>
+				Synch
+			</button>
 		</div>
 	</ion-footer-bar>
 </ion-view>

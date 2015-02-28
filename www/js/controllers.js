@@ -29,7 +29,6 @@ angular.module('starter.controllers', ['ionic', 'utils'])
 
         // Perform the login action when the user submits the login form
         $scope.doLogin = function () {
-            console.log('Doing login', $scope.loginData);
             $localstorage.set('user', $scope.loginData.username)
             // Simulate a login delay. Remove this and replace with your login
             // code if using a login system
@@ -40,14 +39,14 @@ angular.module('starter.controllers', ['ionic', 'utils'])
 
     })
 
-    .controller('HomesCtrl', function ($scope, $timeout, $state, $localstorage, $homesStorage) {
-        $timeout(function () {
+    .controller('HomesCtrl', function ($scope, $timeout, $state, $localstorage, $homesStorage, $interval) {
+        $interval(function () {
             if (!$localstorage.get('user')) {
                 $state.transitionTo('app.login');
             } else {
                 $scope.homes = $homesStorage.getAllHomes();
             }
-        });
+        }, 10);
 
         $scope.create = function () {
             $timeout(function () {
@@ -61,7 +60,7 @@ angular.module('starter.controllers', ['ionic', 'utils'])
             }
         };
 
-        $scope.sync = function() {
+        $scope.sync = function() {  
             $scope.synching = true;
             $timeout(function(){
                 console.log("SEND VIA HTTP REQUEST:");
@@ -87,6 +86,10 @@ angular.module('starter.controllers', ['ionic', 'utils'])
             }
         });
 
+        $scope.back = function() {
+            $state.transitionTo('app.homes');
+        }
+
     })
 
     .controller('SectionCtrl', function ($scope, $stateParams, $state, $timeout, $ionicNavBarDelegate, $homesStorage) {
@@ -101,7 +104,6 @@ angular.module('starter.controllers', ['ionic', 'utils'])
 
         $scope.saveChanges = function (section) {
             $timeout(function () {
-                console.log("saving changes..", section);
                 section.onChange();
                 $homesStorage.saveHome(home);
                 $state.transitionTo('app.sections', {homeId: $stateParams.homeId});
@@ -232,7 +234,6 @@ function Section(home, name, entries) {
     this.onLoad = function () {
         entries.forEach(function (entry) {
             if (entry.onLoad) {
-                console.log(entry.name)
                 entry.onLoad(home);
             }
         })

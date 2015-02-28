@@ -1,4 +1,4 @@
-<ion-view view-title="Home">
+<ion-view view-title="Home Sections">
   <ion-content>
     <ion-list>
       <ion-item ng-repeat="section in sections" href="#/app/section/{{home.id}}/{{section.id}}">
@@ -6,9 +6,12 @@
       </ion-item>
     </ion-list>
   </ion-content>
-	<ion-footer-bar align-title="center" class="bar-positive">
-		<div class="buttons">
-			<a class="button button-large" href="#/app/homes">Back</a>
-		</div>
-	</ion-footer-bar>
+  <ion-footer-bar align-title="center" class="bar-dark">
+    <div class="buttons" ng-click="back()">
+      <button class="button">
+        <i class="ion-arrow-left-c"></i>
+        Back
+      </button>
+    </div>
+  </ion-footer-bar>
 </ion-view>
