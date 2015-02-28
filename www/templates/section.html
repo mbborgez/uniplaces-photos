@@ -1,5 +1,47 @@
-<ion-view view-title="Playlist">
+<ion-view view-title="{{section.name}}">
   <ion-content>
-    <h1>Playlist</h1>
+    <h1>{{section.name}}</h1>
+    <div class="list">
+	    <div ng-repeat="entry in section.entries" class="entry">
+		    <div ng-switch on="entry.type">
+		    	<div ng-switch-when="text">
+		    		<label class="item item-input">
+					  <span class="input-label">{{entry.name}}</span>
+					  <input type="text"  value="{{entry.value}}">
+					</label>
+		    	</div>
+
+				<div ng-switch-when="options">
+					<label class="item item-input item-select">
+					    <div class="input-label">{{entry.name}}</div>
+					    <select>
+					    	<option ng-repeat="option in entry.options">{{option}}</option>
+					    </select>
+				    </label>
+		    	</div>
+
+				<div ng-switch-when="boolean">
+					<ul class="list">
+					  <li class="item item-toggle">
+					     {{entry.name}}
+					     <label class="toggle toggle-assertive">
+					       <input type="checkbox" ng-model="entry.value">
+					       <div class="track">
+					         <div class="handle"></div>
+					       </div>
+					     </label>
+					  </li>
+				    </ul>
+			    </div>
+
+				<div ng-switch-when="number">
+					<label class="item item-input">
+					  <span class="input-label">{{entry.name}}</span>
+					  <input type="number" value="{{entry.value}}">
+					</label>
+				</div>
+		    </div>
+	    </div>	
+    </div>
   </ion-content>
 </ion-view>
