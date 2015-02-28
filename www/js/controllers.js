@@ -1,9 +1,13 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['ionic', 'utils'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $localstorage) {
   //$scope.home = new Home();
   // Form data for the login modal
   $scope.loginData = {};
+  var loggedUser = $localstorage.get('user');
+  if(loggedUser) {
+    $scope.loginData.username = loggedUser;
+  }
 
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -25,6 +29,7 @@ angular.module('starter.controllers', [])
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
     console.log('Doing login', $scope.loginData);
+    $localstorage.set('user', $scope.loginData.username)
     // Simulate a login delay. Remove this and replace with your login
     // code if using a login system
     $timeout(function() {
@@ -46,6 +51,8 @@ angular.module('starter.controllers', [])
     $scope.section = findSection(sections, $stateParams.sectionId);
     if(!$scope.section) {
       $state.transitionTo('app.sections');
+    } else {
+
     }
     console.log("section", $scope.section);
   }
@@ -56,6 +63,14 @@ angular.module('starter.controllers', [])
         return allSections[i];
       }
     }
+  }
+
+  function watchSection(section) {
+    $scope.$watch('section', saveChanges);
+  }
+
+  function saveChanges(newSection) {
+    newSection.onChange();
   }
 });
 
@@ -119,6 +134,7 @@ function Section(name, entries) {
   this.name = name;
   this.entries = entries;
   this.onChange = function() {
+    debugger;
     entries.forEach(function(entry) {
       if(Entry.prototype.isPrototypeOf(entry) && typeof(entry.onChange) == "function") {
         entry.onChange();
@@ -137,7 +153,7 @@ function newSections() {
   var initialSection = new Section("Overview", [
       new TextEntry("Photographer", savePropertie('photographer_id')),
       new TextEntry("Provider", savePropertie("accommodation_provider.name")),
-      new BooleanEntry("Rent as", savePropertie("rent_as")),
+      new OptionsEntry("Rent as", ["whole","room"], savePropertie("rent_as")),
     ]);
 
   var typologySection = new Section("Typology", [
