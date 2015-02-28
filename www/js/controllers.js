@@ -43,19 +43,20 @@ angular.module('starter.controllers', ['ionic', 'utils'])
   $scope.sections = sections;
 })
 
-.controller('SectionCtrl', function($scope, $stateParams, $state) {
-  console.log("id:", $stateParams.sectionId);
-  console.log(sections);
-
+.controller('SectionCtrl', function($scope, $stateParams, $state, $timeout, $ionicNavBarDelegate) {
   if(sections && $stateParams.sectionId) {
     $scope.section = findSection(sections, $stateParams.sectionId);
     if(!$scope.section) {
       $state.transitionTo('app.sections');
-    } else {
-
     }
-    console.log("section", $scope.section);
   }
+
+  $scope.saveChanges = function(section) {
+    console.log("saving changes");
+    console.log(section);
+    section.onChange();
+    $state.transitionTo('app.sections');
+  };
 
   function findSection(allSections, sectionId) {
     for(var i=0; i<allSections.length; ++i) {
@@ -65,14 +66,9 @@ angular.module('starter.controllers', ['ionic', 'utils'])
     }
   }
 
-  function watchSection(section) {
-    $scope.$watch('section', saveChanges);
-  }
-
-  function saveChanges(newSection) {
-    newSection.onChange();
-  }
 });
+
+
 
 function Entry(name, type, onChange) {
     this.name = name;
@@ -121,12 +117,35 @@ function NumberEntry(name, onChange) {
 function savePropertie(home_propertie) {
   return function(value) {
     var properties_names = home_propertie.split('.');
-    var propertie = home;
-    for(var i=0; i<properties_names.length-1; ++i) {
-      propertie = propertie[properties_names];
-    }
-    propertie[properties_names.length-1] = value;
+    var last_name = properties_names.pop();
+    searchPropertie(home, properties_names)[last_name] = value;
   };
+
+  function searchPropertie(obj, properties_names) {
+    if(properties_names) {
+      var search = properties_names.shift();
+      if(properties_names.length == 0) {
+        return obj;
+      } else {
+        return searchPropertie(obj[search], properties_names);
+      }
+    }
+    return obj;
+  }
+
+  function toArray(obj) {
+    var result = [];
+    for (var prop in obj) {
+        var value = obj[prop];
+        if (typeof value === 'object') {
+            result.push(toArray(value)); // <- recursive call
+        }
+        else {
+            result.push(value);
+        }
+    }
+    return result;
+  }
 }
 
 function Section(name, entries) {
@@ -134,10 +153,9 @@ function Section(name, entries) {
   this.name = name;
   this.entries = entries;
   this.onChange = function() {
-    debugger;
     entries.forEach(function(entry) {
-      if(Entry.prototype.isPrototypeOf(entry) && typeof(entry.onChange) == "function") {
-        entry.onChange();
+      if(entry.onChange) {
+        entry.onChange(entry.value);
       }
     });
   };
@@ -154,6 +172,7 @@ function newSections() {
       new TextEntry("Photographer", savePropertie('photographer_id')),
       new TextEntry("Provider", savePropertie("accommodation_provider.name")),
       new OptionsEntry("Rent as", ["whole","room"], savePropertie("rent_as")),
+      new BooleanEntry("Real", function(){})
     ]);
 
   var typologySection = new Section("Typology", [
@@ -170,3 +189,5 @@ function newSections() {
     typologySection
   ];
 }
+
+var home = {};
