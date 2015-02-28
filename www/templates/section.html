@@ -2,7 +2,7 @@
   <ion-content>
     <div class="list">
 	    <div ng-repeat="entry in section.entries" class="entry">
-		    <div ng-switch on="entry.type">
+		    <div ng-if="entry && entry.name && entry.type" ng-switch on="entry.type">
 		    	<div ng-switch-when="text">
 		    		<label class="item item-input">
 					  <span class="input-label">{{entry.name}}</span>

@@ -47,9 +47,23 @@ angular.module('utils', ['ionic'])
     },
 
     saveHome: function(newHome) {
+      var sections = newHome.sections;
+      newHome.sections = undefined;
+
       var homes = this.getAllHomes();
+      
+      for(var i=0;i<homes.length; ++i) {
+        if(homes[i].id == newHome.id) {
+          homes[i] = newHome;
+          this.saveHomes(homes);
+          return;
+        }
+      }
+
       homes.push(newHome);
       this.saveHomes(homes);
+
+      newHome.sections = sections;
     }
 
   };
