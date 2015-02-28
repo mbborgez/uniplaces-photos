@@ -1,6 +1,5 @@
 
 
-/*
 function Home() {
 {
     date_of_session: new Date(),
@@ -35,6 +34,7 @@ function Home() {
         extra: "8Âº esq",
         postal_code: "4450-016"
     },
+    /*
     property_features: {
         accessibility: "yes/no/unknown",
         wi_fi: "yes/no/unknown",
@@ -75,9 +75,9 @@ function Home() {
         }
     },
     conditions: {
-        cancellation_policy: "flexible/moderate/strict/super-strict",
+        cancellation_policy: "flexible/moderate/strict/super_strict",
         minimum_nights: 90
-    },
+    },*/
     rent: {
         base_price: {
             amount: 50000,
@@ -195,6 +195,4 @@ function Home() {
             }
         ]
     }
-    */
-//}
 
