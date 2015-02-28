@@ -35,12 +35,16 @@
 
   </ion-content>
 
-	<ion-footer-bar align-title="center" class="bar-dark">
-		<div class="buttons" ng-click="saveChanges(section)">
-			<button class="button button-large">
-				<i class="ion-arrow-left-c"></i>
-				Back
-			</button>
-		</div>
-	</ion-footer-bar>
+<div class="bar bar-footer">
+	<button class="button button-full button-balanced" 
+		ng-click="saveChanges(section)" type="button">Save</button>
+</div>
+		<!--
+          <button 
+          		class="button button-block button-dark" 
+          		ng-click="saveChanges(section)" 
+          		type="submit">
+          		Save
+          </button>
+          -->
 </ion-view>

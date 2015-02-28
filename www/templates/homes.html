@@ -1,7 +1,15 @@
 <ion-view view-title="Uniplaces">
   <ion-content>
     <div class="list">
-      <ion-item ng-repeat="home in homes" href="/#/app/sections/{{home.id}}">
+	
+		<div class="list-inset">
+		  <label class="item item-input">
+		    <i class="icon ion-search placeholder-icon"></i>
+		    <input type="text" placeholder="Search" ng-model="query">
+		  </label>
+		</div>
+
+      <ion-item ng-repeat="home in homes | filter:query" href="/#/app/sections/{{home.id}}">
         {{home.name || home.id}}
       </ion-item>
 
@@ -21,7 +29,7 @@
 
 			<button class="button button-dark" ng-click="sync()">
 			    <i class="icon ion-upload"></i>
-				Synch
+				Sync
 			</button>
 		</div>
 	</ion-footer-bar>
