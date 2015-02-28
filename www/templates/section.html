@@ -1,47 +1,43 @@
 <ion-view view-title="{{section.name}}">
   <ion-content>
-    <h1>{{section.name}}</h1>
     <div class="list">
 	    <div ng-repeat="entry in section.entries" class="entry">
 		    <div ng-switch on="entry.type">
 		    	<div ng-switch-when="text">
 		    		<label class="item item-input">
 					  <span class="input-label">{{entry.name}}</span>
-					  <input type="text"  value="{{entry.value}}">
+					  <input type="text" ng-model="entry.value">
 					</label>
 		    	</div>
 
 				<div ng-switch-when="options">
 					<label class="item item-input item-select">
 					    <div class="input-label">{{entry.name}}</div>
-					    <select>
+					    <select ng-model="entry.value">
 					    	<option ng-repeat="option in entry.options">{{option}}</option>
 					    </select>
 				    </label>
 		    	</div>
 
 				<div ng-switch-when="boolean">
-					<ul class="list">
-					  <li class="item item-toggle">
-					     {{entry.name}}
-					     <label class="toggle toggle-assertive">
-					       <input type="checkbox" ng-model="entry.value">
-					       <div class="track">
-					         <div class="handle"></div>
-					       </div>
-					     </label>
-					  </li>
-				    </ul>
+					<ion-toggle ng-model="entry.value" toggle-class="toggle-calm">{{entry.name}}</ion-toggle>
 			    </div>
 
 				<div ng-switch-when="number">
 					<label class="item item-input">
 					  <span class="input-label">{{entry.name}}</span>
-					  <input type="number" value="{{entry.value}}">
+					  <input type="number" ng-model="entry.value">
 					</label>
 				</div>
 		    </div>
 	    </div>	
     </div>
+
   </ion-content>
+
+	<ion-footer-bar align-title="center" class="bar-positive">
+		<div class="buttons" ng-click="saveChanges(section)">
+			<button class="button button-large">Back</button>
+		</div>
+	</ion-footer-bar>
 </ion-view>
