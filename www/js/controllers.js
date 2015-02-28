@@ -38,12 +38,16 @@ angular.module('starter.controllers', [])
   $scope.sections = sections;
 })
 
-.controller('SectionCtrl', function($scope, $stateParams) {
+.controller('SectionCtrl', function($scope, $stateParams, $state) {
   console.log("id:", $stateParams.sectionId);
   console.log(sections);
 
   if(sections && $stateParams.sectionId) {
-    console.log("section", findSection(sections, $stateParams.sectionId));
+    $scope.section = findSection(sections, $stateParams.sectionId);
+    if(!$scope.section) {
+      $state.transitionTo('app.sections');
+    }
+    console.log("section", $scope.section);
   }
 
   function findSection(allSections, sectionId) {
@@ -56,37 +60,47 @@ angular.module('starter.controllers', [])
 });
 
 function Entry(name, type, onChange) {
-  this.name = name;
-  this.type = type;
-  this.onChange = onChange;
+    this.name = name;
+    this.type = type;
+    this.onChange = onChange;
+    this.value = undefined;
 }
 
 function TextEntry(name, onChange) {
-  this.prototype = new Entry(name, "text", onChange);
+  Entry.call(this, name, "text", onChange);
+  this.value = "";
 }
 
 function OptionsEntry(name, options, onChange) {
+  Entry.call(this, name, "options", onChange);
+  
   this.options = options;
-  this.prototype = new Entry(name, "options", onChange);
+  
   this.isValid = function(option) {
     return !options || options.indexOf(option) != -1;
   };
+  
+  if(options) {
+    this.value = options[0];
+  }
 }
 
 function BooleanEntry(name, onChange) {
-  this.prototype = new OptionsEntry(name, ["yes", "no"], onChange);
+  Entry.call(this, name, "boolean", onChange);
+  this.value = true;
 }
 
 function NullableBooleanEntry(name, onChange) {
-  this.prototype = new OptionsEntry(name, ["yes", "no", "unknown"], onChange);
+  OptionsEntry.call(this, name, ["yes", "no", "unknown"], onChange);
 }
 
 function CurrencyEntry(name, onChange) {
-  this.prototype = OptionsEntry(name, "EUR", ["EUR"], onChange);
+  OptionsEntry.call(this, name, "EUR", ["EUR"], onChange);
 }
 
 function NumberEntry(name, onChange) {
-  this.prototype = new Entry(name, "number", onChange);
+  Entry.call(this, name, "number", onChange);
+  this.value = 1;
 }
 
 function savePropertie(home_propertie) {
@@ -126,7 +140,7 @@ function newSections() {
       new BooleanEntry("Rent as", savePropertie("rent_as")),
     ]);
 
-  var typologySection = new Section("typology", [
+  var typologySection = new Section("Typology", [
       new OptionsEntry("Type", ["house", "apartment", "studio"], savePropertie('typology.type_code')),
       new OptionsEntry("Accomodation type", ["residence","hotel","hostel","private"], savePropertie("typology.accommodation_type_code")),
       new NumberEntry("Number of bedrooms", savePropertie("typology.number_of_bedrooms")),
