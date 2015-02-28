@@ -61,6 +61,15 @@ angular.module('starter.controllers', ['ionic', 'utils'])
             }
         };
 
+        $scope.sync = function() {
+            $scope.synching = true;
+            $timeout(function(){
+                console.log("SEND VIA HTTP REQUEST:");
+                console.log(JSON.stringify($homesStorage.getAllHomes()));
+                $scope.synching = false;
+            }, 1000);
+        }
+
     })
 
     .controller('SectionsCtrl', function ($scope, $stateParams, $state, $timeout, $homesStorage) {

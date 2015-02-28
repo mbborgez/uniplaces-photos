@@ -1,7 +1,7 @@
 <ion-view view-title="Uniplaces">
   <ion-content>
     <div class="list">
-      <ion-item ng-repeat="home in homes" href="#/app/sections/{{home.id}}">
+      <ion-item ng-repeat="home in homes" href="/#/app/sections/{{home.id}}">
         {{home.name || home.id}}
       </ion-item>
 
@@ -13,6 +13,9 @@
 	<ion-footer-bar align-title="center" class="bar-positive">
 		<div class="buttons" ng-click="create()">
 			<button class="button button-large">Create</button>
+		</div>
+		<div class="buttons" ng-click="sync()">
+			<button class="button button-large">Synch</button>
 		</div>
 	</ion-footer-bar>
 </ion-view>
