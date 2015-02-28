@@ -46,7 +46,7 @@ angular.module('starter.controllers', ['ionic', 'utils'])
 
     })
 
-    .controller('HomesCtrl', function ($scope, $timeout, $state, $localstorage, $homesStorage, $interval) {
+    .controller('HomesCtrl', function ($scope, $timeout, $state, $localstorage, $homesStorage, $interval, $ionicLoading) {
         $interval(function () {
             if (!$localstorage.get('user')) {
                 $state.transitionTo('app.login');
@@ -69,11 +69,15 @@ angular.module('starter.controllers', ['ionic', 'utils'])
 
         $scope.sync = function() {  
             $scope.synching = true;
+            $ionicLoading.show({
+              template: 'Loading...'
+            });
             $timeout(function(){
                 console.log("SEND VIA HTTP REQUEST:");
                 console.log(JSON.stringify($homesStorage.getAllHomes()));
                 $scope.synching = false;
-            }, 1000);
+                $ionicLoading.hide();
+            }, 4000);
         }
 
     })
